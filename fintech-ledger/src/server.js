@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
+import apiRoutes from "./routes/api.js";
 
 dotenv.config();
 
@@ -9,9 +10,9 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Fintech Ledger API is running");
-});
+// Mount Routes
+app.use("/api", apiRoutes);
+
 
 // Start the Server
 const startServer = async () => {
