@@ -18,6 +18,16 @@ app.use("/auth", authRoutes);
 // Protected Routes (Apply middleware)
 app.use("/api", protect, apiRoutes);
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err.stack);
+  
+  res.status(500).json({
+    error: 'Internal Server Error',
+    message: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
+});
+
 // Start the Server
 const startServer = async () => {
   await connectDB();
