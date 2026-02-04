@@ -4,6 +4,7 @@ import { connectDB } from "./config/db.js";
 import apiRoutes from "./routes/api.js";
 import authRoutes from "./routes/authRoutes.js"; // Import Auth Routes
 import { protect } from "./middlewares/authMiddleware.js";
+import {connectRedis} from './config/redis.js'; // Import Redis configuration
 
 dotenv.config();
 
@@ -31,6 +32,10 @@ app.use((err, req, res, next) => {
 // Start the Server
 const startServer = async () => {
   await connectDB();
+  // Don't block server startup if Redis fails to connect
+  connectRedis().catch(err => {
+    console.warn("Redis connection failed, continuing without Redis:", err.message);
+  });
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
