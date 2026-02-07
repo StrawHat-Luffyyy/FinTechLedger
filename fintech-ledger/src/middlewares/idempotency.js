@@ -1,7 +1,7 @@
-import { redisClient } from "../config/redis.js";
+import { redisClient } from '../config/redis.js';
 
 export const checkIdempotency = async (req, res, next) => {
-  const key = req.headers["idempotency-key"];
+  const key = req.headers['idempotency-key'];
   if (!key) {
     // Allow requests without idempotency for non-idempotent tests/clients.
     return next();
@@ -11,7 +11,7 @@ export const checkIdempotency = async (req, res, next) => {
   const userId = req.user?.userId;
   if (!userId) {
     return res.status(401).json({
-      error: "User context missing - authentication required for idempotency",
+      error: 'User context missing - authentication required for idempotency',
     });
   }
 
@@ -21,7 +21,7 @@ export const checkIdempotency = async (req, res, next) => {
   try {
     // Skip if Redis is not ready
     if (!redisClient.isOpen) {
-      console.warn("Redis not connected, skipping idempotency check");
+      console.warn('Redis not connected, skipping idempotency check');
       return next();
     }
 
@@ -40,16 +40,16 @@ export const checkIdempotency = async (req, res, next) => {
           .set(
             `idempotency:${scopedKey}`,
             JSON.stringify(body),
-            { EX: 60 * 60 * 24 }, // Cache for 24 hours
+            { EX: 60 * 60 * 24 } // Cache for 24 hours
           )
-          .catch((err) => console.error("Failed to cache response:", err));
+          .catch((err) => console.error('Failed to cache response:', err));
       }
       // Call the original response function
       return originalJson.call(res, body);
     };
     next();
   } catch (err) {
-    console.error("Redis Error:", err);
+    console.error('Redis Error:', err);
     next(); // Fail open: If Redis dies, just process the request normally
   }
 };

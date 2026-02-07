@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: Fintech Ledger API
+  description: A secure, ACID-compliant ledger system for financial transactions.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      tags: [Auth]
+      security: [] # Public route
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username: { type: string }
+                email: { type: string }
+                password: { type: string }
+      responses:
+        201:
+          description: User created
+  /auth/login:
+    post:
+      summary: Login to get a JWT
+      tags: [Auth]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        200:
+          description: Returns JWT token
+  /api/accounts:
+    get:
+      summary: Get user accounts
+      tags: [Accounts]
+      responses:
+        200:
+          description: List of accounts
+  /api/transfer:
+    post:
+      summary: Transfer money securely
+      tags: [Transactions]
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          schema:
+            type: string
+          description: Unique key to prevent double processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromAccountId: { type: string, format: uuid }
+                toAccountId: { type: string, format: uuid }
+                amount: { type: number }
+      responses:
+        200:
+          description: Transfer successful
+        400:
+          description: Insufficient funds or Validation error 

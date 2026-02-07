@@ -1,4 +1,4 @@
-import { pool } from "../config/db.js";
+import { pool } from '../config/db.js';
 
 export const getAccounts = async (req, res) => {
   try {
@@ -9,7 +9,7 @@ export const getAccounts = async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
-    console.error("Failed to fetch accounts:", err);
+    console.error('Failed to fetch accounts:', err);
     res.status(500).json({ error: err.message });
   }
 };

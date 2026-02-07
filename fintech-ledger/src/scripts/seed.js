@@ -1,11 +1,11 @@
-import { pool } from "../config/db.js";
+import { pool } from '../config/db.js';
 
 const seed = async () => {
   try {
-    console.log("Seeding database...");
+    console.log('Seeding database...');
     // 1 Clear existing data(Optional for development)
     await pool.query(
-      "TRUNCATE TABLE ledger_entries, transfers, accounts, users CASCADE",
+      'TRUNCATE TABLE ledger_entries, transfers, accounts, users CASCADE'
     );
 
     // 2 Insert sample users
@@ -28,15 +28,15 @@ const seed = async () => {
       ($1, 'Main Wallet', 1000),
       ($2, 'Main Wallet', 0);
       `,
-      [aliceId, bobId],
+      [aliceId, bobId]
     );
 
-    console.log("Accounts created. Alice has ₹1000, Bob has ₹0.");
+    console.log('Accounts created. Alice has ₹1000, Bob has ₹0.');
 
-    console.log("Seeding Complete!");
+    console.log('Seeding Complete!');
     process.exit(0);
   } catch (err) {
-    console.error("Seeding Failed:", err);
+    console.error('Seeding Failed:', err);
     process.exit(1);
   }
 };

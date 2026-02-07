@@ -11,11 +11,11 @@ export const validate = (schema) => (req, res, next) => {
     // ZodError uses 'issues' not 'errors'
     const issues = result.error?.issues || [];
     return res.status(400).json({
-      error: "Validation Failed",
+      error: 'Validation Failed',
       details: issues.map((e) => {
         // Strip the first part of the path (body/params/query) to get just the field name
         const fieldPath = e.path.slice(1);
-        const field = fieldPath.length > 0 ? fieldPath.join(".") : "unknown";
+        const field = fieldPath.length > 0 ? fieldPath.join('.') : 'unknown';
         return {
           field,
           message: e.message,

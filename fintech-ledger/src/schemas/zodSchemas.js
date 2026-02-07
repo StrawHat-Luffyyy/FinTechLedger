@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 //SignUp Schema
 export const signupSchema = z.object({
   body: z.object({
-    username: z.string().min(3, "Username must be at least 3 characters long"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters long"),
+    username: z.string().min(3, 'Username must be at least 3 characters long'),
+    email: z.string().email('Invalid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters long'),
   }),
 });
 
@@ -20,11 +20,11 @@ export const loginSchema = z.object({
 // Transfer Schema
 export const transferSchema = z.object({
   body: z.object({
-    fromAccountId: z.string().uuid("Invalid account ID format"),
-    toAccountId: z.string().uuid("Invalid account ID format"),
+    fromAccountId: z.string().uuid('Invalid account ID format'),
+    toAccountId: z.string().uuid('Invalid account ID format'),
     amount: z
-      .number({ invalid_type_error: "Amount must be a number" })
-      .positive("Amount must be greater than zero")
-      .gt(0, "Amount cannot be zero"),
+      .number({ invalid_type_error: 'Amount must be a number' })
+      .positive('Amount must be greater than zero')
+      .gt(0, 'Amount cannot be zero'),
   }),
 });
