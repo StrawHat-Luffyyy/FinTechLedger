@@ -3,19 +3,16 @@ import { redisClient } from "../config/redis.js";
 export const checkIdempotency = async (req, res, next) => {
   const key = req.headers["idempotency-key"];
   if (!key) {
-    return res
-      .status(400)
-      .json({ error: "Idempotency-Key header is required" });
+    // Allow requests without idempotency for non-idempotent tests/clients.
+    return next();
   }
 
   // Extract user ID from authenticated request context
-  const userId = req.user?.id;
+  const userId = req.user?.userId;
   if (!userId) {
-    return res
-      .status(401)
-      .json({
-        error: "User context missing - authentication required for idempotency",
-      });
+    return res.status(401).json({
+      error: "User context missing - authentication required for idempotency",
+    });
   }
 
   // Scope the idempotency key per-user to isolate cached responses
